@@ -1,6 +1,6 @@
 //
 // Project and Analysis of Algorithms
-// Flávio Keidi Miyazawa
+// Flï¿½vio Keidi Miyazawa
 //
 // This is only to view the shortest path/tree obtained by the Lemon graph library
 //
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
   // uncomment one of these lines to change default pdf reader, or insert new one
   //set_pdfreader("open");    // pdf reader for Mac OS X
   //set_pdfreader("xpdf");    // pdf reader for Linux
-  //set_pdfreader("evince");  // pdf reader for Linux
+  set_pdfreader("evince");  // pdf reader for Linux
   if (argc!=4) {cout<<endl<<
       "Program to obtain a shortest path from node s to a node t," << endl <<
       "Usage: "<< argv[0]<<"  <graph>  <source_node_name>  <target_node_name>"<<

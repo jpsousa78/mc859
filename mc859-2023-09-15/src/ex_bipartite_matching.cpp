@@ -1,5 +1,5 @@
 // Project and Analysis of Algorithms
-// Flávio Keidi Miyazawa
+// Flï¿½vio Keidi Miyazawa
 // Problems with connectivity: Maximum Bipartite Matching (using digraphs as example,
 // arcs have source in one part and target in the other part)
 #include <stdio.h>
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
   // uncomment one of these lines to change default pdf reader, or insert new one
   //set_pdfreader("open");    // pdf reader for Mac OS X
   //set_pdfreader("xpdf");    // pdf reader for Linux
-  //set_pdfreader("evince");  // pdf reader for Linux
+  set_pdfreader("evince");  // pdf reader for Linux
 
       
   // double cutoff;   // used to prune non promissing branches (of the B&B tree)

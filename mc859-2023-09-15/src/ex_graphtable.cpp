@@ -1,6 +1,6 @@
 //
 // Project and Analysis of Algorithms
-// Flávio Keidi Miyazawa
+// Flï¿½vio Keidi Miyazawa
 //
 // ex_viewgrahp.cpp
 #include <stdio.h>
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
   // uncomment one of these lines to change default pdf reader, or insert new one
   //set_pdfreader("open");    // pdf reader for Mac OS X
   //set_pdfreader("xpdf");    // pdf reader for Linux
-  //set_pdfreader("evince");  // pdf reader for Linux
+  set_pdfreader("evince");  // pdf reader for Linux
 
   if (argc!=2) {cout<< endl << "Usage: "<< argv[0]<<" <graph_filename>"<<endl << endl <<
       "Example:" << endl <<

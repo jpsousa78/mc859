@@ -45,7 +45,7 @@ extern double MY_INF;
 // Constructor for the global variables declared in myutils.
 // Put all here, so we can have visibility of all global variables
 inline myutilsdefaultparameters::myutilsdefaultparameters(){
-  pdfreader = "open"; // Program to open a pdf file in Mac OS X
+  pdfreader = "evince"; // Program to open a pdf file in Mac OS X
   // You can change the term "evince" by any other pdf viewer.
   // But the program must run in a terminal with the sintax 
   // <pdfreader>  <pdffile>

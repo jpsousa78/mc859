@@ -24,7 +24,7 @@ LEMONLIB  = -L$(LEMONDIR)/lib   -lemon
 VERSION := $(shell gurobi_cl --version | cut -c 26,28,30 | head -n 1)
 #FLAGVERSION := $(shell gurobi_cl --version | cut -c 26,28 | head -n 1)
 FLAGVERSION := 100
-GUROBI_DIR = /Library/gurobi1000/macos_universal2
+GUROBI_DIR = "/opt/gurobi1003/linux64"
 
 HOMEDIR = .
 

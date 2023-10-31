@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
   // or insert new one
   //set_pdfreader("open");    // pdf reader for Mac OS X
   //set_pdfreader("xpdf");    // pdf reader for Linux
-  //set_pdfreader("evince");  // pdf reader for Linux
+  set_pdfreader("evince");  // pdf reader for Linux
 
   if (argc!=2) {cout<< endl << "Usage: "<< argv[0]<<" <graph_filename>"<<endl << endl <<
       "Example:" << endl <<

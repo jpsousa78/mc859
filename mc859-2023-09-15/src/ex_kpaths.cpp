@@ -10,7 +10,7 @@
 // defines an integer polyhedral (using the fact that A is totally unimodular 
 // and b is integer).
 //
-// Send corrections/comments to Flávio K. Miyazawa
+// Send corrections/comments to Flï¿½vio K. Miyazawa
 
 #include <gurobi_c++.h>
 #include <iostream>
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
   // uncomment one of these lines to change default pdf reader, or insert new one
   //set_pdfreader("open");    // pdf reader for Mac OS X
   //set_pdfreader("xpdf");    // pdf reader for Linux
-  //set_pdfreader("evince");  // pdf reader for Linux
+  set_pdfreader("evince");  // pdf reader for Linux
   //set_pdfreader("open -a Skim.app");
   // double cutoff;   // used to prune non promissing branches (of the B&B tree)
   if (argc!=5) {cout<<endl<<
