@@ -1,7 +1,0 @@
-
-Gurobi 10.0.0 (mac64[arm], gurobi_cl) logging started Fri Aug 25 04:29:04 2023
-
-Set parameter Username
-Set parameter LogFile to value "gurobi.log"
-Academic license - for non-commercial use only - expires 2023-11-19
-Using license file /Users/fkm/Dropbox/tiziu/programming/solvers/gurobi/licenses/MacBook-Pro-M1-Flavio/gurobi.lic
