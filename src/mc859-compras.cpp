@@ -65,6 +65,65 @@ void Heuristica(Compras_Entrada &C)
     cout << "Erro: Nao construiu solucao valida na fase 2."<<endl;exit(1);}
 }
 
+void Solution()
+{
+  // ---- Setup ----
+  // - empty solution
+  // - zero dist run
+  // - max best dist
+  // - zero last run
+  // ----------------
+  // ----- VMP -----
+  // - for
+  // -- run VMP
+  // -- log last run with BL(2-opt)
+  // -- if achieved better value, replace best distance
+  // ---- Total Dist ----
+  // - get total dist sum
+  // - if solution, return
+  // - else, write what got so far through 2opt
+  // 
+  // 
+  // 
+  // 
+}
+
+void VizinhoMaisProximo()
+{
+  // ---- Setup ----
+  // - clear everything
+  // - max closest neighbor
+  // ---- Solve ----
+  // - step
+  // - while there are cities not visited
+  // -- step
+  // -- compare distance
+  // -- if closest so far, update and add to path
+  // -- repeat
+}
+
+void InsercaoMaisBarata()
+{
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
+}
+
+void BuscaLocal()
+{
+  // ---- Setup ----
+  // ---- Solve ----
+  // - compare solution matrix cells
+  // - if found better solution with < dist, switch path
+  // 
+  // 
+  // 
+}
 
 int main(int argc, char *argv[]) 
 {
