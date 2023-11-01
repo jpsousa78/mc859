@@ -118,8 +118,8 @@ void CaminhoMaisCurto(Compras_Entrada &C)
     }
     C.lojaitem[i] = No;
     TemItemComprado[No] = true;
-    /* FIM - MENORES PRECOS - FIM */
   }
+  /* FIM - MENORES PRECOS - FIM */
 
   C.esvaziasolucao();
   // Primeiro noh da solucao eh o deposito.
@@ -137,7 +137,7 @@ void CaminhoMaisCurto(Compras_Entrada &C)
 ArcIntMap erase(Arc a);
 
 // NAO VAI USAR MAS TEM CONTEXTO DENTRO QUE DA PRA REUTILIZAR //
-void CicloMinimo(Compras_Entrada &C)
+int CicloMinimo(Compras_Entrada &C)
 {
   DNodeIt v(C.g), currentNode;
   int min_cycle = INT_MAX;
@@ -148,7 +148,7 @@ void CicloMinimo(Compras_Entrada &C)
     // info do no atual
     DNode currentNode = C.nodesequence[i];
     OutArcIt fromArc(C.g, C.nodesequence[i]);
-    InArcIt toArc(C.g, C.nodesequence[i+1]);
+    InArcIt toArc(C.g, C.nodesequence[i + 1]);
 
     // pegar aresta pra "remover"
     int distancia = C.dist[fromArc];
@@ -156,8 +156,8 @@ void CicloMinimo(Compras_Entrada &C)
 
     // nova menor distancia
     Dijkstra<Digraph, ArcIntMap> Dij(C.g, C.dist);
-    Dij.run(C.nodesequence[i], C.nodesequence[i+1]);
-    int distance = Dij.dist(C.nodesequence[i+1]);
+    Dij.run(C.nodesequence[i], C.nodesequence[i + 1]);
+    int distance = Dij.dist(C.nodesequence[i + 1]);
 
     min_cycle = min(min_cycle, distance + e.weight);
 
@@ -170,11 +170,123 @@ void CicloMinimo(Compras_Entrada &C)
   return min_cycle;
 }
 
+void MenoresPrecos(Compras_Entrada &C)
+{
+  /* MENORES PRECOS */
+  int menorpreco, nfaltantes;
+  DNode No;
+  DNodeBoolMap TemItemComprado(C.g);
+  for (DNodeIt v(C.g); v != INVALID; ++v)
+    TemItemComprado[v] = false;
+  for (int i = 0; i < C.nitens; i++)
+  {
+    menorpreco = INT_MAX;
+    No = INVALID;
+    for (DNodeIt v(C.g); v != INVALID; ++v)
+    {
+      // cout << "Preco do item "<<i<<" na loja "<<C.vname[v]<<": "<<C.preco[v][i]<<endl;
+      if (C.preco[v][i] < menorpreco)
+      {
+        No = v;
+        menorpreco = C.preco[v][i];
+      }
+    }
+    if (No == INVALID)
+    {
+      cout << "Erro: Nao eh possivel comprar item " << i << "." << endl;
+      exit(3);
+    }
+    C.lojaitem[i] = No;
+    TemItemComprado[No] = true;
+  }
+  /* FIM - MENORES PRECOS - FIM */
+}
+
+void VizinhoMaisProximo(Compras_Entrada &C)
+{
+  int nlojas = 0;
+  int mais_prox = MAXDIST;
+  int dist_total = 0;
+  int dist_atual = 0;
+  int mais_prox_index = 0;
+  int num_itens = C.nitens;
+  int num_lojas = C.nnodes;
+  int num_arestas = C.narcs;
+  vector<DNode> lojas, lojas_escolhidas;
+  Arc a;
+
+  MenoresPrecos(C);
+
+  lojas = C.lojaitem;
+  // saving original list
+
+  C.esvaziasolucao();
+  C.inserelojasolucao(C.Deposito);
+
+  while (num_itens != 0)     // loop at'e comprar todos os itens
+  {
+    mais_prox = MAXDIST; // reset mais_prox
+    for (int i = 0; i < num_arestas; ++i)
+    {
+      if (C.dist[])
+      dist_atual = 
+      // lojas[i]->dist(solution[mais_prox - 1]);
+      if (dist_atual < mais_prox)
+      {
+        mais_prox_index = i;
+        mais_prox = dist_atual;
+      }
+    }
+
+    dist_total += mais_prox;
+    solution.push_back(lojas[mais_prox_index]);
+    lojas.erase(lojas.begin() + mais_prox_index);
+
+    --num_itens;
+    ++mais_prox;
+  }
+
+  copy_city_deque(temp, original_list); // restore original list
+  return dist_total + solution[0]->dist(solution[nlojas - 1]);
+}
+
+void ItemNaMesmaLoja(Compras_Entrada &C)
+{
+}
+
 void BuscaLocal()
 {
   // - compare solution matrix cells
   // - if found better solution with < dist, switch paths
+  deque<city *> new_path;
+  int min_distance = get_solution_distance();
+  bool start_over = false;
 
+  signal(SIGTERM, end_opt); // signal handler, ends optimization if it receives SIGTERM
+  while (!done)
+  {
+    start_over = false;
+    for (int i = 1; i < num_cities && !start_over; ++i)
+    {
+      for (int j = i + 1; j < num_cities - 1 && !start_over; ++j)
+      {
+        // only check moves that will reduce distance
+        if (solution[i - 1]->dist(solution[j]) + solution[i]->dist(solution[j + 1]) < solution[i - 1]->dist(solution[i]) + solution[j]->dist(solution[j + 1]))
+        {
+          swap_two(i, j);
+          min_distance = get_solution_distance();
+          start_over = true;
+        }
+
+        else
+          start_over = false;
+      }
+    }
+
+    if (!start_over)
+      break;
+  }
+  return min_distance;
 }
 
 void Solution(Compras_Entrada &C)
@@ -187,7 +299,7 @@ void Solution(Compras_Entrada &C)
   //  -- INVERTER A ORDEM (FATORES MENORES FICAM NO FINAL)
   //
   // ? APLICAR OTIMIZACAO COMPRANDO MAIS DE UM ITEM NA MESMA LOJA ?
-  // 
+  //
   // RODAR BUSCA LOCAL
 }
 
