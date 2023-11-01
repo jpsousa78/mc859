@@ -11,7 +11,6 @@
 #include "myutils.h"
 #include <lemon/concepts/digraph.h>
 #include <lemon/preflow.h>
-#include <lemon/dijkstra.h>
 using namespace lemon;
 #define MAXNODES 1000
 #define MAXITENS 1000
@@ -351,83 +350,5 @@ bool Compras_Entrada::visualizasolucao(void)
                      LongLongIntToString(this->custosolucao()) + "\"");
   G.View();
 }
-
-// class Dijkstra
-// {
-// public:
-//   Arc Value;
-//   typedef BinHeap<Arc, typename Digraph::template NodeMap<int>, std::less<Arc>> Heap;
-//   // Pointer to the underlying digraph.
-//   const Digraph *G;
-//   // Pointer to the length map.
-//   const int *_length;
-//   // Pointer to the map of predecessors arcs.
-//   ArcIntMap *_pred;
-//   // Indicates if _pred is locally allocated (true) or not.
-//   bool local_pred;
-//   // Pointer to the map of distances.
-//   DNodeArcMap *_dist;
-//   // Indicates if _dist is locally allocated (true) or not.
-//   bool local_dist;
-//   // Pointer to the map of processed status of the nodes.
-//   DNodeValueMap *_processed;
-//   // Indicates if _processed is locally allocated (true) or not.
-//   bool local_processed;
-//   // Pointer to the heap.
-//   Heap *_heap;
-//   // Indicates if _heap is locally allocated (true) or not.
-//   bool local_heap;
-
-  // void run();
-
-  // void init();
-
-  // bool emptyQueue();
-
-  // void _start()
-  // {
-  //   while (!emptyQueue())
-  //     _processNextNode();
-  // }
-
-  // void _finalizeNodeData(DNode v, Arc dst)
-  // {
-  //   _processed->set(v, true);
-  //   _dist->set(v, dst);
-  // }
-
-  // DNode _processNextNode()
-  // {
-  //   DNode v = _heap->top();
-  //   Arc oldvalue = _heap->prio();
-  //   _heap->pop();
-  //   _finalizeNodeData(v, oldvalue);
-
-  //   for (OutArcIt e(*G, v); e != INVALID; ++e)
-  //   {
-  //     DNode w = G->target(e);
-  //     switch (_heap->state(w))
-  //     {
-  //     case Heap::PRE_HEAP:
-  //       _heap->push(w, Dijkstra<OperationTraits>::plus(oldvalue, (*_length)[e]));
-  //       _pred->set(w, e);
-  //       break;
-  //     case Heap::IN_HEAP:
-  //     {
-  //       Arc newvalue = OperationTraits::plus(oldvalue, (*_length)[e]);
-  //       if (OperationTraits::less(newvalue, (*_heap)[w]))
-  //       {
-  //         _heap->decrease(w, newvalue);
-  //         _pred->set(w, e);
-  //       }
-  //     }
-  //     break;
-  //     case Heap::POST_HEAP:
-  //       break;
-  //     }
-  //   }
-  //   return v;
-  // }
-// }
 
 #endif

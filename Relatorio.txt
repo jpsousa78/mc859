@@ -1,0 +1,44 @@
+Objetivo:
+Fazer pelo menos 2 heurísticas construtivas aleatorizadas (como gulosos que foram aleatorizados) e pelo menos 1 heurística de melhoria (como busca local), além de uma heurística final que deve chamar as heurísticas construtivas e de melhoria, para obter soluções viáveis boas para o problema (o aluno é responsável por montar a combinação da heurística final através das heurísticas construtivas e de busca local). Alternativamente, pode-se implementar uma metaheurística que envolva uma abordagem de busca mais sofisticada.
+
+Problema:
+Problema das Compras com Custos de Transporte
+Neste problema, temos um grafo dirigido completo G = (V, A, c), onde V é o conjunto de vértices, A é o conjunto de arcos e d é uma função de distância nos arcos. O conjunto de vértices é dividido em duas partes: V = L ∪ {0}, onde 0 é um vértice origem e L é o conjunto de lojas. Temos também vários itens a serem comprados, dados pelo conjunto I = {1, . . . , k}. Cada item i ∈ I possui um peso w(i) > 0, e seu preço é de p(i,l) > 0 se for comprado na loja l ∈ L (este preço pode ser infinito, caso a loja não tenha o item). O custo para o veículo trafegar em uma aresta e ∈ E carregando um peso P é dado por uma função κ(d(e), P). Uma rota de compra deve ter início e término no vértice 0, passar por cada loja no máximo uma vez, mas para cada item i ∈ L, deve definir em qual vértice irá comprá-lo. Uma vez que o item é comprado, este é transportado até o término da rota. O custo da rota de compra é dado pelo custo de transporte (custo total para transitar nas arestas da rota considerando o custo para trafegar em cada aresta da rota com seus correspondentes itens) e o preço total pago pelos itens. O objetivo deste problema é encontrar uma rota de compra de custo mínimo.
+Esse problema é uma versão modificada do problema do caixeiro viajante (TSP). No TSP tradicional, a solução mais simples envolve encontrar o caminho mínimo entre todas as localizações de um grafo. Neste caso temos algumas complexidades a mais e fatores que podem influenciar a melhor solução.
+Preço dos itens nas lojas
+Cada local possui diferentes preços para os itens que o caixeiro deseja comprar. Sendo assim, devemos modificar o percurso para planejar a melhor combinação de preços com distância percorrida. Se houvesse somente este incremento, o menor custo “c_min”  estaria relacionado a distância total “dt” e a soma dos preços “sp” da seguinte forma:
+cmin = min(dti + spj)
+Peso de cada item
+No caso, o problema também indica que devemos considerar o impacto que o peso “P” de cada item tem sobre o deslocamento. Cada trajeto deverá contabilizar o custo de transportar a soma dos pesos dos itens por cada aresta.
+Fator peso
+Cada aresta tem um fator “F” que influencia quanto o peso total da compra irá afetar o deslocamento. Podemos interpretar esse fator como a inclinação do terreno, por exemplo, que afeta a quantidade de força que o caixeiro terá que fazer para se deslocar verticalmente com o excesso de peso. Nesse caso, a conta se da por:
+cmin = min(dti + spj +k=0n (Fk* m=0kPm))
+	A cada compra feita o peso é acumulado, então o fator peso da aresta sempre irá se multiplicar ao peso total acumulado até aquele instante.
+Heurística do Vizinho Mais Próximo - Bellmore e Nemhauser
+A Heurística do Vizinho Mais Próximo segue a ideia de que escolher o vizinho mais próximo a cada passo levará a uma solução inicial razoável. Ela prioriza a proximidade geográfica na seleção das lojas a serem visitadas.O problema envolve encontrar uma rota eficiente que visite todas as lojas e compre os itens, minimizando o custo total. Escolher o vizinho mais próximo a cada passo ajuda a otimizar a função de distância e reduz a quantidade de deslocamento entre lojas, o que pode-se argumentar ser essencial para economizar tempo e recursos. É uma boa escolha para a construção inicial da rota, pois é simples de implementar e costuma fornecer soluções razoáveis rapidamente. A proximidade é um fator significativo na logística de compra, e essa heurística a explora de maneira eficaz.
+
+Um procedimento de inserção faz um sub-tour em k nós na iteração k e determina qual dos n-k nós restantes deve ser inserido no próximo sub-tour (a etapa de seleção) e onde (entre quais dois nós) ele deve ser inserido (a etapa de inserção).
+
+Comece com qualquer nó como nó inicial (no caso, usaremos o depósito).
+Encontre o nó não visitado mais próximo do último nó adicionado ao caminho. Adicione este nó ao caminho. 
+Repita a Etapa 2 até que todos os nós estejam contidos no caminho. Em seguida, junte o primeiro e o último nós.
+
+Pior caso: distância percorrida pelo "vizinho mais próximo"distância mais eficaz  12log2(n)+12 
+O algoritmo do vizinho mais próximo e de ordem n ao quadrado O(n2), ou seja, o número de computações não ultrapassará n2.
+Considerações
+	A primeira coisa a se notar é que o peso final sempre será o mesmo, dado que compraremos todos os itens. No entanto, “quando” o caixeiro adquire o item pode mudar. Isso fará diferença ao multiplicar com o fator peso. A primeira coisa que podemos inferir disso é que se deixarmos as arestas com o menor fator “F” por último, então podemos minimizar os produtos no final do trajeto (chamemos isso de ordem dos fatores). 
+	Além disso, podemos considerar a possibilidade de podermos comprar mais de um item na mesma loja com a finalidade de evitar adicionar uma aresta extra ao caminho, somente de tal forma que a soma dos pesos adquiridos mais cedo multiplicado pelo fator do caminho encurtado resulte em um custo menor que os pesos separados multiplicados pelos fatores do caminho mais longo.
+
+Metaheurística: Ordem Reversa dos Menores Fatores
+	Podemos aplicar essas considerações aos conhecimentos do problema original e formular uma maneira de minimizar os custos. Se incluirmos a possibilidade de encurtar o caminho ao comprar mais de um item na mesma loja, podemos encurtar o caminho, diminuir o número de multiplicações que poderiam ser afetadas pelo peso acumulado, pois como o peso é incremental, a ordem dos fatores afeta o produto já que os fatores mudam.
+	Para que isso funcione, devemos verificar que a troca compensa. Podemos fazer isso usando a seguinte expressão:
+
+(pesoA + pesoB) * arestaI +custoAdicional < pesoA * arestaJ + pesoB * arestaK
+
+Em casos gerais, como os exemplificados nos exemplos fornecidos, as chances sao que o produto do fator e da soma dos pesos influencie mais que o total da distância, porém isso dependerá de como os custos forem atribuídos e calculados. A fim de simplificar uma solução inicial, podemos dar prioridade ao cálculo da ordem dos fatores. Podemos aplicar a lógica do Vizinho Mais Próximo ao cálculo da ordem dos fatores. Fazendo isso, obtemos a priorização de valores menores no fluxo original do trajeto. Porém, se invertermos essa ordem, fazemos com que os fatores mais baixos tenham a tendência de ficar para o final, oferecendo multiplicadores menores para o peso incremental.
+Assim, podemos estimar uma solução que apresente um valor calculado da seguinte forma:
+ cmin = min(distânciatotal + preçoTotal + ordemDosFatores(Fk*Pm ))
+	
+Busca Local
+A Busca Local é uma técnica de melhoria que se concentra em explorar as vizinhanças da solução atual, fazendo pequenas alterações para tentar reduzir o custo total da compra. O operador de vizinhança usado é o "swap," que troca a ordem de visitação de duas lojas na rota. O princípio da Busca Local permite aprimorar uma solução inicial encontrada pelas heurísticas construtivas ao buscar desvios mais eficientes.
+	Nesse caso, podemos aplicar a busca local ao cálculo do caminho de menor distância e a ordem dos fatores para otimizar o resultado.
