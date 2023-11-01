@@ -1,7 +1,11 @@
 
 // Project and Analysis of Algorithms
-// Fl�vio Keidi Miyazawa
+// Prof: Fl�vio Keidi Miyazawa
+// Student: Joao Paulo de Sousa Brito
 #include <mc859-compras.h>
+
+// CODIGO OFICIAL SOH A PARTIR DA LINHA ~177
+// ATE LA EH NA MAIOR PARTE LIXO/CODIGO RUIM
 
 void TrocaDNode(DNode &a, DNode &b)
 {
@@ -11,7 +15,7 @@ void TrocaDNode(DNode &a, DNode &b)
   b = aux;
 }
 
-// Uma heuristica ruim so' para exemplificar como construir solucao.
+// SOLUCAO INICIAL RUIM
 void Heuristica(Compras_Entrada &C)
 {
   vector<int> LojaEscolhida(MAXITENS);
@@ -85,67 +89,106 @@ void Heuristica(Compras_Entrada &C)
   }
 }
 
-void Solution(Compras_Entrada &C)
+// NAO VAI USAR MAS TEM CONTEXTO DENTRO QUE DA PRA REUTILIZAR //
+void CaminhoMaisCurto(Compras_Entrada &C)
 {
-  // ---- Setup ----
-  // - empty solution
-  // - zero dist run
-  // - max best dist
-  // - zero last run
-  // ----------------
-  // ----- VMP -----
-  // - for
-  // -- run VMP
-  // -- log last run with BL(2-opt)
-  // -- if achieved better value, replace best distance
-  // ---- Total Dist ----
-  // - get total dist sum
-  // - if solution, return
-  // - else, write what got so far through 2opt
-  vector<int> LojaEscolhida(MAXITENS);
-  int menorpreco, nit;
-  long long int valorsolucaoatual, valorsolucaonova;
-  DNodeBoolMap TemItemComprado(C.g);
+  /* MENORES PRECOS */
+  int menorpreco, nfaltantes;
   DNode No;
+  DNodeBoolMap TemItemComprado(C.g);
   for (DNodeIt v(C.g); v != INVALID; ++v)
     TemItemComprado[v] = false;
+  for (int i = 0; i < C.nitens; i++)
+  {
+    menorpreco = INT_MAX;
+    No = INVALID;
+    for (DNodeIt v(C.g); v != INVALID; ++v)
+    {
+      // cout << "Preco do item "<<i<<" na loja "<<C.vname[v]<<": "<<C.preco[v][i]<<endl;
+      if (C.preco[v][i] < menorpreco)
+      {
+        No = v;
+        menorpreco = C.preco[v][i];
+      }
+    }
+    if (No == INVALID)
+    {
+      cout << "Erro: Nao eh possivel comprar item " << i << "." << endl;
+      exit(3);
+    }
+    C.lojaitem[i] = No;
+    TemItemComprado[No] = true;
+    /* FIM - MENORES PRECOS - FIM */
+  }
+
+  C.esvaziasolucao();
+  // Primeiro noh da solucao eh o deposito.
+  C.inserelojasolucao(C.Deposito);
+  // Isso aqui soh insere todas as lojas com item sem ordem,
+  // sem criterio e sem saber se tem conexao com o no seguinte
+  for (DNodeIt v(C.g); v != INVALID; ++v)
+    if (TemItemComprado[v])
+      C.inserelojasolucao(v);
+  // Ultimo tambem eh deposito
+  C.inserelojasolucao(C.Deposito);
 }
 
-void VizinhoMaisProximo()
-{
-  // ---- Setup ----
-  // - clear everything
-  // - max closest neighbor
-  // ---- Solve ----
-  // - step
-  // - while there are cities not visited
-  // -- step
-  // -- compare distance
-  // -- if closest so far, update and add to path
-  // -- repeat
-}
+// ESSE ERASE TA QUEBRADO //
+ArcIntMap erase(Arc a);
 
-void InsercaoMaisBarata()
+// NAO VAI USAR MAS TEM CONTEXTO DENTRO QUE DA PRA REUTILIZAR //
+void CicloMinimo(Compras_Entrada &C)
 {
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
+  DNodeIt v(C.g), currentNode;
+  int min_cycle = INT_MAX;
+  int E = C.narcs;
+  ArcIntMap &arcs = C.dist;
+  for (int i = 0; i < E; i++)
+  {
+    // info do no atual
+    DNode currentNode = C.nodesequence[i];
+    OutArcIt fromArc(C.g, C.nodesequence[i]);
+    InArcIt toArc(C.g, C.nodesequence[i+1]);
+
+    // pegar aresta pra "remover"
+    int distancia = C.dist[fromArc];
+    C.dist[fromArc] = MAXDIST;
+
+    // nova menor distancia
+    Dijkstra<Digraph, ArcIntMap> Dij(C.g, C.dist);
+    Dij.run(C.nodesequence[i], C.nodesequence[i+1]);
+    int distance = Dij.dist(C.nodesequence[i+1]);
+
+    min_cycle = min(min_cycle, distance + e.weight);
+
+    // "devolver" aresta depois
+    C.dist[fromArc] = distancia;
+    ++v;
+  }
+
+  // return shortest cycle
+  return min_cycle;
 }
 
 void BuscaLocal()
 {
-  // ---- Setup ----
-  // ---- Solve ----
   // - compare solution matrix cells
-  // - if found better solution with < dist, switch path
+  // - if found better solution with < dist, switch paths
+
+}
+
+void Solution(Compras_Entrada &C)
+{
+  // RODAR VIZINHO MAIS PROXIMO PRA DISTANCIA
+  //  -- INVERTER A ORDEM (DISTANCIAS MENORES FICAM NO FINAL)
   //
+  // RODAR VERSAO MODIFICADA DO VIZINHO MAIS PROXIMO
+  // SOH QUE PRA PRIORIZAR OS FATORES MENORES "~mais proximos~"
+  //  -- INVERTER A ORDEM (FATORES MENORES FICAM NO FINAL)
   //
-  //
+  // ? APLICAR OTIMIZACAO COMPRANDO MAIS DE UM ITEM NA MESMA LOJA ?
+  // 
+  // RODAR BUSCA LOCAL
 }
 
 int main(int argc, char *argv[])
